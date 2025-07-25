@@ -5,7 +5,8 @@
 #include <unordered_map>
 #pragma intrinsic(_BitScanForward64)
 
-//Bitboard Code
+
+//enumeration of piecetypes
 enum PieceType{
     WHITE_KING = 0,
     WHITE_QUEEN = 1,
@@ -21,6 +22,7 @@ enum PieceType{
     BLACK_PAWNS = 11
 };
 
+//enumeration of all the squares into integers
 enum Square {
   a1, b1, c1, d1, e1, f1, g1, h1,
   a2, b2, c2, d2, e2, f2, g2, h2,
@@ -32,29 +34,13 @@ enum Square {
   a8, b8, c8, d8, e8, f8, g8, h8
 };
 
-
-//Move data Type
-
-struct Move {
-    Square from_square;
-    Square to_square;
-    PieceType moving_piece;
-    PieceType captured_piece;
-
-    
-
-
-
-};
-
-
-
 //Bitboard Class
-
 class BitBoard {
 public:
+    //array holding all 12 bitboards which represent the gamestate
     std::array<unsigned long long, 12> boards;
 
+    //All Ranks as bits (May be useful, idk)
     static const unsigned long long RANK_1 = 0x00000000000000FFULL;
     static const unsigned long long RANK_2 = 0x000000000000FF00ULL;
     static const unsigned long long RANK_3 = 0x0000000000FF0000ULL;
@@ -64,7 +50,7 @@ public:
     static const unsigned long long RANK_7 = 0x00FF000000000000ULL;
     static const unsigned long long RANK_8 = 0xFF00000000000000ULL;
 
-
+    //All files as bits (May be useful, idk)
     static const unsigned long long A_FILE = 0x0101010101010101ULL;
     static const unsigned long long B_FILE = 0x0202020202020202ULL;
     static const unsigned long long C_FILE = 0x0303030303030303ULL;
@@ -74,74 +60,62 @@ public:
     static const unsigned long long G_FILE = 0x0707070707070707ULL;
     static const unsigned long long H_FILE = 0x0808080808080808ULL;
 
+    //constructor
     BitBoard() {
         for (int i = 0; i < 12; ++i) {
             boards[i] = 0ULL;
     }
     }
-    /*void SetGame(){
-        boards[WHITE_KING] = 1ULL << e1;
-        boards[WHITE_QUEEN] = 1ULL << d1;
-        boards[WHITE_BISHOPS] = (1ULL << c1) | (1ULL << f1); 
-        boards[WHITE_KNIGHTS] = (1ULL << b1) | (1ULL << g1);
-        boards[WHITE_ROOKS] = (1ULL << a1) | (1ULL << h1);
-        for(int i = 8; i < 16; i++){
-            boards[WHITE_PAWNS] = boards[WHITE_PAWNS] | (1ULL << i);
-        }
 
-        boards[BLACK_KING] = 1ULL << e8;
-        boards[BLACK_QUEEN] = 1ULL << d8;
-        boards[BLACK_BISHOPS] = (1ULL << c8) | (1ULL << f8);
-        boards[BLACK_KNIGHTS] = (1ULL << b8) | (1ULL << g8);
-        boards[BLACK_ROOKS] = (1ULL << a8) | (1ULL << h8);
-        for(int i = 48; i < 56; i++){
-            boards[BLACK_PAWNS] = boards[BLACK_PAWNS] | (1ULL << i);
-        }
-    }*/
-
+    //sets game to default position. I think I will eventually switch to Fen, but idk when
     void SetGame(){
-        set_bit(WHITE_KING, e1);
-        set_bit(WHITE_QUEEN, d1);
-        set_bit(WHITE_BISHOPS, c1);
-        set_bit(WHITE_BISHOPS, f1);
-        set_bit(WHITE_KNIGHTS, b1);
-        set_bit(WHITE_KNIGHTS, g1);
-        set_bit(WHITE_ROOKS, a1);
-        set_bit(WHITE_ROOKS, h1);
+        set_PieceBit(WHITE_KING, e1);
+        set_PieceBit(WHITE_QUEEN, d1);
+        set_PieceBit(WHITE_BISHOPS, c1);
+        set_PieceBit(WHITE_BISHOPS, f1);
+        set_PieceBit(WHITE_KNIGHTS, b1);
+        set_PieceBit(WHITE_KNIGHTS, g1);
+        set_PieceBit(WHITE_ROOKS, a1);
+        set_PieceBit(WHITE_ROOKS, h1);
         for(int i = 8; i < 16; i++){
-            set_bit(WHITE_PAWNS, i);
+            set_PieceBit(WHITE_PAWNS, i);
         }
-        set_bit(BLACK_KING, e8);
-        set_bit(BLACK_QUEEN, d8);
-        set_bit(BLACK_BISHOPS, c8);
-        set_bit(BLACK_BISHOPS, f8);
-        set_bit(BLACK_KNIGHTS, b8);
-        set_bit(BLACK_KNIGHTS, g8);
-        set_bit(BLACK_ROOKS, a8);
-        set_bit(BLACK_ROOKS, h8);
+        set_PieceBit(BLACK_KING, e8);
+        set_PieceBit(BLACK_QUEEN, d8);
+        set_PieceBit(BLACK_BISHOPS, c8);
+        set_PieceBit(BLACK_BISHOPS, f8);
+        set_PieceBit(BLACK_KNIGHTS, b8);
+        set_PieceBit(BLACK_KNIGHTS, g8);
+        set_PieceBit(BLACK_ROOKS, a8);
+        set_PieceBit(BLACK_ROOKS, h8);
         for(int i = 48; i < 56; i++){
-            set_bit(BLACK_PAWNS, i);
+            set_PieceBit(BLACK_PAWNS, i);
         }
     }
 
-    void set_bit(PieceType piece, int square){
-        boards[piece] ^= (1ULL << square);
+    //sets a bit to 1
+    void set_PieceBit(PieceType piece, int square){
+        boards[piece] |= (1ULL << square);
     }
 
+    //checks if a piece of a given type exists on a square
     bool get_PieceBit(PieceType piece, int square){
         return boards[piece] & (1ULL << square);
     }
 
 
-    void MovePiece(std::string move){
-        //tbd
+    //removes a piece of a given type on a square
+    void pop_PieceBit(PieceType piece, int square){
+            boards[piece] &= ~(1ULL << square);
+    }
 
-    } 
-
+    //for printing
     friend std::ostream& operator<<(std::ostream& os, const BitBoard& bb);
 
 };
 
+
+//adding compatibility for printing for my class
 std::ostream& operator<<(std::ostream& os, const BitBoard& bb){
     char boardrep[64];
     for (int i = 0; i < 64; i++){
@@ -180,9 +154,6 @@ std::ostream& operator<<(std::ostream& os, const BitBoard& bb){
             }
     
     }
-    
-
-
 
     for (int i = 63; i > -1; i--){
         std::cout << boardrep[i] << " ";
@@ -194,6 +165,9 @@ std::ostream& operator<<(std::ostream& os, const BitBoard& bb){
     return os;
 }
 
+
+
+//main function
 int main(){
     BitBoard bb;
     bb.SetGame();
