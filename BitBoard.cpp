@@ -85,7 +85,20 @@ void pop_bit(unsigned long long& board, int square){
 
 
 void print_board(unsigned long long board){
+    for (int r = 0; r < 8; r++){
+        for (int f = 0; f < 8; f++){
+            int square = 8*r + f;
 
+            if (!f){
+                printf("  %d ", 8 - r);
+            }
+
+            printf(" %d ", get_bit(board, square) ? 1 : 0 );
+        }
+        printf("\n");
+    }
+
+    printf("     a  b  c  d  e  f  g  h \n Bitboard: %llu", board);
 }
 
 

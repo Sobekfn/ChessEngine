@@ -2,6 +2,7 @@
     "C_Cpp.default.compilerPath": "C:/msys64/mingw64/bin/g++.exe",
     "files.associations": {
         "unordered_map": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "array": "cpp"
     }
 }

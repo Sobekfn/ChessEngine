@@ -14,10 +14,10 @@ unsigned long long MoveGeneration::mask_pawn_attacks(int square, int side){
 
     bitboard |= (1ULL << square);
 
-    if(side){ //if black to move
-
+    if(!side){ //if white to move
+        attacks |= (square >> 7);
     }
-    else{ //if white to move
+    else{ //if black to move
 
     }
 
