@@ -1,4 +1,3 @@
-// bitboard.hpp
 #ifndef BITBOARD_HPP
 #define BITBOARD_HPP
 
@@ -33,38 +32,17 @@ enum Square {
     a8, b8, c8, d8, e8, f8, g8, h8
 };
 
+void print_board(unsigned long long bitboard);
+void set_bit(unsigned long long& board, int square);
+bool get_bit(unsigned long long& board, int square);
+void pop_bit(unsigned long long& board, int square);
+
+
 class BitBoard {
 public:
     std::array<unsigned long long, 14> boards;
-
-    static const unsigned long long RANK_1;
-    static const unsigned long long RANK_2;
-    static const unsigned long long RANK_3;
-    static const unsigned long long RANK_4;
-    static const unsigned long long RANK_5;
-    static const unsigned long long RANK_6;
-    static const unsigned long long RANK_7;
-    static const unsigned long long RANK_8;
-
-    static const unsigned long long A_FILE;
-    static const unsigned long long B_FILE;
-    static const unsigned long long C_FILE;
-    static const unsigned long long D_FILE;
-    static const unsigned long long E_FILE;
-    static const unsigned long long F_FILE;
-    static const unsigned long long G_FILE;
-    static const unsigned long long H_FILE;
-
     BitBoard();
-
     void SetGame();
-    void set_PieceBit(PieceType piece, int square);
-    bool get_PieceBit(PieceType piece, int square);
-    void pop_PieceBit(PieceType piece, int square);
-
-    // You forgot this method — declared it here
-    void Move_Piece(PieceType piece, int from, int to);
-
     friend std::ostream& operator<<(std::ostream& os, const BitBoard& bb);
 };
 
